@@ -23,23 +23,31 @@ module.exports = {
 
     if (offset !== null) {
       console.log("enqueing");
-      enqueue(async () => {
-        const gh = await util.spawnGhidra("decompile.py", offset);
+      enqueue(
+        async () => {
+          const gh = await util.spawnGhidra("decompile.py", offset);
 
-        const codeblock = "```c\n" + gh + "\n```";
-        if (codeblock.length > 2000) {
-          const haste = await util.sendToHast(gh);
+          const codeblock = "```c\n" + gh + "\n```";
+          if (codeblock.length > 2000) {
+            const haste = await util.sendToHast(gh);
+            await interaction.createFollowup({
+              content: `:white_check_mark: Output too long for Discord: <${haste}>`,
+              flags: 64
+            });
+          } else {
+            await interaction.createFollowup({
+              content: codeblock,
+              flags: 64
+            });
+          }
+        },
+        async () => {
           await interaction.createFollowup({
-            content: `:white_check_mark: Output too long for Discord: <${haste}>`,
-            flags: 64
-          });
-        } else {
-          await interaction.createFollowup({
-            content: codeblock,
+            content: ":x: Decompilation failed - Tell Jules!",
             flags: 64
           });
         }
-      });
+      );
     }
   }
 };

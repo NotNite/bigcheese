@@ -1,7 +1,7 @@
 const queue = [];
 
-function enqueue(task) {
-  queue.push(task);
+function enqueue(task, fail) {
+  queue.push([task, fail]);
 }
 
 let queueRunning = false;
@@ -9,12 +9,18 @@ let queueRunning = false;
 const interval = setInterval(async () => {
   if (!queueRunning) {
     queueRunning = true;
-    const task = queue.shift();
-    if (task) {
+    const potentialTask = queue.shift();
+    if (potentialTask) {
+      const [task, fail] = potentialTask;
       try {
         await task();
       } catch (e) {
         console.error(e);
+        try {
+          await fail();
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
 
