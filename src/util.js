@@ -3,7 +3,7 @@ const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 const { spawn } = require("child_process");
 
 function spawnGhidra(script, args) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const ghidra = spawn(config.ghidraExecutable, [
       "ghidra-project",
       "bigcheese",
@@ -18,12 +18,12 @@ function spawnGhidra(script, args) {
 
     let stdout = "";
     ghidra.stdout.on("data", (data) => {
-      //process.stdout.write(data.toString());
+      process.stdout.write(data.toString());
       stdout += data.toString();
     });
 
     ghidra.stderr.on("data", (data) => {
-      //process.stderr.write(data.toString());
+      process.stderr.write(data.toString());
     });
 
     // =====BIGCHEESE_START=====
@@ -33,6 +33,7 @@ function spawnGhidra(script, args) {
       /=====BIGCHEESE_START=====\n([\s\S]+?)\n=====BIGCHEESE_END=====/gm;
     ghidra.on("close", (code) => {
       const match = regex.exec(stdout);
+      if (match == null) reject("wuh oh");
       resolve(match[1].trim());
     });
   });
