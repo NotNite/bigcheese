@@ -10,7 +10,14 @@ const interval = setInterval(async () => {
   if (!queueRunning) {
     queueRunning = true;
     const task = queue.shift();
-    if (task) await task();
+    if (task) {
+      try {
+        await task();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     queueRunning = false;
   }
 }, 1000);
