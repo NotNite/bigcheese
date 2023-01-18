@@ -29,10 +29,10 @@ bot.on("interactionCreate", async (interaction) => {
     (x) => x.manifest.name === interaction.data.name
   );
 
+  const id = interaction.user ? interaction.user?.id : interaction.member?.id;
+
   console.log(
-    `${interaction.user.id} - ${interaction.data.name} - ${JSON.stringify(
-      interaction.data
-    )}`
+    `${id} - ${interaction.data.name} - ${JSON.stringify(interaction.data)}`
   );
   if (command != null) {
     try {
