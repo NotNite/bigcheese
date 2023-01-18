@@ -4,6 +4,12 @@ const { spawn } = require("child_process");
 
 function spawnGhidra(script, args) {
   return new Promise((resolve, reject) => {
+    const safetyCheck = /^[0-9a-fA-F]+$/.test(args);
+    if (!safetyCheck) {
+      reject("Invalid args");
+      return;
+    }
+
     const ghidra = spawn(config.ghidraExecutable, [
       "ghidra-project",
       "bigcheese",
