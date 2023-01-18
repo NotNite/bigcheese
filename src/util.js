@@ -33,7 +33,10 @@ function spawnGhidra(script, args) {
       /=====BIGCHEESE_START=====\n([\s\S]+?)\n=====BIGCHEESE_END=====/gm;
     ghidra.on("close", (code) => {
       const match = regex.exec(stdout);
-      if (match == null) reject("wuh oh");
+      if (match == null) {
+        reject("wuh oh");
+        return;
+      }
       resolve(match[1].trim());
     });
   });
