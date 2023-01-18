@@ -29,6 +29,11 @@ bot.on("interactionCreate", async (interaction) => {
     (x) => x.manifest.name === interaction.data.name
   );
 
+  console.log(
+    `${interaction.user.id} - ${interaction.data.name} - ${JSON.stringify(
+      interaction.data
+    )}`
+  );
   if (command != null) {
     try {
       await command.exec(interaction);
