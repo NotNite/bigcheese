@@ -1,0 +1,10 @@
+{
+  "name": "bigcheese",
+  "version": "1.0.0",
+  "description": "ffxiv reverse engineering discord bot",
+  "author": "NotNite",
+  "main": "src/index.js",
+  "dependencies": {
+    "eris": "^0.17.1"
+  }
+}
