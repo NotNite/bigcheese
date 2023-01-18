@@ -9,7 +9,7 @@ print("=====BIGCHEESE_START=====")
 if len(addrs) == 0:
     print(":x: No matches found.")
 else:
-    print(":ms_check_mark: Signature matches:")
+    print(":white_check_mark: Signature matches:")
     for addr in addrs:
         print(" - `0x" + addr.toString("") + "`")
 
