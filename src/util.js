@@ -53,6 +53,7 @@ function spawnGhidra(script, args, doSafetyCheck = true) {
 function parseOffset(str) {
   let ret = str.trim();
 
+  if (ret.startsWith("ffxiv_dx11.exe+")) ret.replace("ffxiv_dx11.exe+", "");
   if (ret.startsWith("0x")) ret.replace("0x", "");
   if (ret.startsWith("sub_")) ret.replace("sub_", "");
   if (ret.startsWith("FUN_")) ret.replace("FUN_", "");
