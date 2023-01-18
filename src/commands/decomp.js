@@ -1,5 +1,6 @@
 const Eris = require("eris");
 const util = require("../util");
+const { enqueue } = require("../taskQueue");
 
 module.exports = {
   manifest: {
@@ -20,19 +21,24 @@ module.exports = {
 
     await interaction.acknowledge(64);
 
-    const gh = await util.spawnGhidra("decompile.py", offset);
+    if (offset !== null) {
+      console.log("enqueing");
+      enqueue(async () => {
+        const gh = await util.spawnGhidra("decompile.py", offset);
 
-    const codeblock = "```c\n" + gh + "\n```";
-    if (codeblock.length > 2000) {
-      const haste = await util.sendToHast(gh);
-      await interaction.createFollowup({
-        content: `:white_check_mark: Output too long for Discord: <${haste}>`,
-        flags: 64
-      });
-    } else {
-      await interaction.createFollowup({
-        content: codeblock,
-        flags: 64
+        const codeblock = "```c\n" + gh + "\n```";
+        if (codeblock.length > 2000) {
+          const haste = await util.sendToHast(gh);
+          await interaction.createFollowup({
+            content: `:white_check_mark: Output too long for Discord: <${haste}>`,
+            flags: 64
+          });
+        } else {
+          await interaction.createFollowup({
+            content: codeblock,
+            flags: 64
+          });
+        }
       });
     }
   }
