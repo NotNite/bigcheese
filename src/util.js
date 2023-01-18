@@ -2,12 +2,14 @@ const fs = require("fs");
 const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 const { spawn } = require("child_process");
 
-function spawnGhidra(script, args) {
+function spawnGhidra(script, args, doSafetyCheck = true) {
   return new Promise((resolve, reject) => {
-    const safetyCheck = /^[0-9a-fA-F]+$/.test(args);
-    if (!safetyCheck) {
-      reject("Invalid args");
-      return;
+    if (doSafetyCheck) {
+      const safetyCheck = /^[0-9a-fA-F]+$/.test(args);
+      if (!safetyCheck) {
+        reject("Invalid args");
+        return;
+      }
     }
 
     const ghidra = spawn(config.ghidraExecutable, [
@@ -76,8 +78,33 @@ async function sendToHast(input) {
   return `https://haste.soulja-boy-told.me/raw/${json.key}`;
 }
 
+function parseSig(sig) {
+  const sigParts = sig.split(" ");
+
+  for (const part of sigParts) {
+    if (part.length > 2) return null;
+
+    if (part === "??" || part === "?") continue;
+
+    const parsed = parseInt(part, 16);
+    if (isNaN(parsed)) return null;
+    if (parsed > 0xff) return null;
+    if (parsed < 0x00) return null;
+  }
+
+  const the = sigParts
+    .map((x) => {
+      if (x === "??" || x === "?") return ".";
+      return `\\x${x}`;
+    })
+    .join("");
+
+  return Buffer.from(the).toString("base64");
+}
+
 module.exports = {
   spawnGhidra,
   parseOffset,
-  sendToHast
+  sendToHast,
+  parseSig
 };

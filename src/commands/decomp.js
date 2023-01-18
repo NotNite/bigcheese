@@ -22,7 +22,7 @@ module.exports = {
     await interaction.acknowledge(64);
 
     if (offset !== null) {
-      console.log("enqueing");
+      console.log("enqueing decompile.py");
       enqueue(
         async () => {
           const gh = await util.spawnGhidra("decompile.py", offset);
