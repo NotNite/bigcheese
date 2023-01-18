@@ -39,6 +39,12 @@ module.exports = {
           });
         }
       );
+    } else {
+      await interaction.createFollowup({
+        content:
+          ":x: Couldn't parse signature. If this works in your code, tell Jules!",
+        flags: 64
+      });
     }
   }
 };

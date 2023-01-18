@@ -48,6 +48,11 @@ module.exports = {
           });
         }
       );
+    } else {
+      await interaction.createFollowup({
+        content: ":x: Couldn't parse offset.",
+        flags: 64
+      });
     }
   }
 };
