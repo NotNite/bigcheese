@@ -40,7 +40,7 @@ bot.on("interactionCreate", async (interaction) => {
     } catch (e) {
       console.error(e);
 
-      await interaction.createFollowup({
+      await interaction.createMessage({
         content: ":x: An error occurred - Tell Jules!",
         flags: 64
       });
