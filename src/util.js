@@ -60,12 +60,9 @@ function parseOffset(str) {
 
   // parse as hex
   let parsed = parseInt(ret, 16);
-
   if (parsed < 0x140000000) parsed += 0x140000000;
 
-  // return as hex
   const toStr = parsed.toString(16);
-
   return isNaN(parsed) ? null : toStr;
 }
 

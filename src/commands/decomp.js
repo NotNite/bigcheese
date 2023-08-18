@@ -1,4 +1,4 @@
-const Eris = require("eris");
+const { Constants } = require("@projectdysnomia/dysnomia");
 const util = require("../util");
 const { enqueue } = require("../taskQueue");
 
@@ -10,7 +10,7 @@ module.exports = {
       {
         name: "function",
         description: "The function to decompile",
-        type: Eris.Constants.ApplicationCommandOptionTypes.STRING,
+        type: Constants.ApplicationCommandOptionTypes.STRING,
         required: true
       }
     ]

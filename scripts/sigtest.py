@@ -1,7 +1,7 @@
 import base64
 
 args = getScriptArgs()
-arg = base64.b64decode(args[0] + b'==')
+arg = base64.b64decode(args[0] + b"==")
 addrs = findBytes(None, arg, 1)
 
 print("=====BIGCHEESE_START=====")

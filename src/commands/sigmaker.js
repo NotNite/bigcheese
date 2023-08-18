@@ -4,12 +4,12 @@ const { enqueue } = require("../taskQueue");
 
 module.exports = {
   manifest: {
-    name: "sigtest",
-    description: "Test a signature",
+    name: "sigmaker",
+    description: "Create a signature",
     options: [
       {
-        name: "signature",
-        description: "The signature to test",
+        name: "address",
+        description: "The address to sig",
         type: Constants.ApplicationCommandOptionTypes.STRING,
         required: true
       }
@@ -17,15 +17,15 @@ module.exports = {
   },
   exec: async (interaction) => {
     const option = interaction.data.options[0].value;
-    const sig = util.parseSig(option);
+    const offset = util.parseOffset(option);
 
     await interaction.acknowledge(64);
 
-    if (sig !== null) {
-      console.log("enqueing sigtest.py");
+    if (offset !== null) {
+      console.log("enqueing sigmaker.py");
       enqueue(
         async () => {
-          const gh = await util.spawnGhidra("sigtest.py", sig, false);
+          const gh = await util.spawnGhidra("sigmaker.py", offset);
 
           await interaction.createFollowup({
             content: gh,
@@ -34,15 +34,14 @@ module.exports = {
         },
         async () => {
           await interaction.createFollowup({
-            content: ":x: Signature test failed - Tell Jules!",
+            content: ":x: Signature creation failed - Tell Jules!",
             flags: 64
           });
         }
       );
     } else {
       await interaction.createFollowup({
-        content:
-          ":x: Couldn't parse signature. If this works in your code, tell Jules!",
+        content: ":x: Couldn't parse offset.",
         flags: 64
       });
     }

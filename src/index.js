@@ -1,11 +1,11 @@
-const Eris = require("eris");
+const { Client, Constants } = require("@projectdysnomia/dysnomia");
 const fs = require("fs");
 
 const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 
-const bot = new Eris.Client("Bot " + config.discordToken, {
+const bot = new Client("Bot " + config.discordToken, {
   restMode: true,
-  intents: Eris.Constants.Intents.allNonPrivileged
+  intents: Constants.Intents.allNonPrivileged
 });
 
 const commands = fs
@@ -15,14 +15,19 @@ const commands = fs
 bot.on("ready", async () => {
   const cmds = commands.map((x) => x.manifest);
 
-  await bot.bulkEditGuildCommands(config.discordGuild, cmds);
-  await bot.bulkEditCommands(cmds);
+  if (process.env["NODE_ENV"] === "production") {
+    console.log("running in production mode");
+    await bot.bulkEditCommands(cmds);
+  } else {
+    console.log("running in dev mode");
+    await bot.bulkEditGuildCommands(config.discordGuild, cmds);
+  }
 
   console.log("ready 2 rumble");
 });
 
 bot.on("interactionCreate", async (interaction) => {
-  if (interaction.type !== Eris.Constants.InteractionTypes.APPLICATION_COMMAND)
+  if (interaction.type !== Constants.InteractionTypes.APPLICATION_COMMAND)
     return;
 
   const command = commands.find(

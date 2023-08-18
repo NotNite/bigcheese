@@ -1,7 +1,4 @@
-const Eris = require("eris");
-const util = require("../util");
 const { execSync } = require("child_process");
-const path = require("path");
 
 module.exports = {
   manifest: {

@@ -5,6 +5,6 @@
   "author": "NotNite",
   "main": "src/index.js",
   "dependencies": {
-    "eris": "^0.17.1"
+    "@projectdysnomia/dysnomia": "^0.1.2"
   }
 }
