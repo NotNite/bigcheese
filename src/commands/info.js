@@ -1,3 +1,4 @@
+const fs = require("fs");
 const { execSync } = require("child_process");
 
 module.exports = {
@@ -16,7 +17,14 @@ module.exports = {
       .toString()
       .trim();
 
-    const gamever = process.env["BIGCHEESE_GAMEVER"] || "unknown";
+    const gameVer = process.env["BIGCHEESE_GAMEVER"] || "unknown";
+
+    const ghidraVer = fs
+      .readFileSync("./ghidra/Ghidra/application.properties", "utf8")
+      .trim()
+      .split("\n")
+      .find((x) => x.startsWith("application.version="))
+      .replace("application.version=", "");
 
     await interaction.createMessage({
       embeds: [
@@ -37,7 +45,13 @@ module.exports = {
             },
             {
               name: `Game version`,
-              value: gamever
+              value: gameVer,
+              inline: true
+            },
+            {
+              name: `Ghidra version`,
+              value: ghidraVer,
+              inline: true
             }
           ]
         }
